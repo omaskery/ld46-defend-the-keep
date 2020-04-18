@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -33,6 +34,8 @@ public class AimGuide : MonoBehaviour
     private Transform origin;
 
     [SerializeField] private float targetingDuration;
+
+    public event Action<Vector3, bool> FiringSolutionFound;
 
     void Start()
     {
@@ -100,6 +103,7 @@ public class AimGuide : MonoBehaviour
 
         var error = (_targetPoint - target).magnitude;
         Debug.Log($"{condition} firing solution: {_initialVelocity} (targetting: {target} [error: {error}])");
+        FiringSolutionFound?.Invoke(_initialVelocity, userSelected);
             
         _state = TargetingState.Inactive;
         _lineRenderer.enabled = false;

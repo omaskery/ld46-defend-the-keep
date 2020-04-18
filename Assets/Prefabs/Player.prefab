@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3071147475175179478}
   - component: {fileID: 7675003660901140200}
   - component: {fileID: 3966483245197892840}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4168782840542950067}
   - component: {fileID: 4168782840542950060}
-  m_Layer: 0
+  - component: {fileID: 6854649563715232533}
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +159,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coordinatesCentredOn: {fileID: 0}
+  aimGuide: {fileID: 0}
   groundCheckMask:
     serializedVersion: 2
     m_Bits: 0
   raycastStartHeight: 1000
+  horizontalScaling: 0.1
+  verticalScaling: 1
+--- !u!114 &6854649563715232533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4168782840542950066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d20ec32b9344b4dcfb2c2dffe9a7b3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 5608907851096998388, guid: 40deb3c418f4f494ca49519e6ee8032f, type: 3}
+  arrowsParent: {fileID: 0}

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(ArrowFirer))]
 public class PlayerController : MonoBehaviour
 {
     [Header("References")] [SerializeField]
     private Transform coordinatesCentredOn;
+
+    [SerializeField] private AimGuide aimGuide;
 
     [Header("Ground Check")] [SerializeField]
     private LayerMask groundCheckMask;
@@ -17,7 +20,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _polarCoordinates = polarCordinatesOf(coordinatesCentredOn, transform);
+        _arrowFirer = GetComponent<ArrowFirer>();
+        _polarCoordinates = PolarCordinatesOf(coordinatesCentredOn, transform);
+        aimGuide.FiringSolutionFound += OnFiringSolutionFound;
     }
 
     void FixedUpdate()
@@ -29,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
         var newPolarCoordinate = _polarCoordinates + inputVector;
         _polarCoordinates = newPolarCoordinate;
-        var newCartesianCoordinate = cartesianCoordinatesOf(coordinatesCentredOn, newPolarCoordinate);
+        var newCartesianCoordinate = CartesianCoordinatesOf(coordinatesCentredOn, newPolarCoordinate);
 
         var nextPosition = new Vector3(
             newCartesianCoordinate.x,
@@ -53,7 +58,7 @@ public class PlayerController : MonoBehaviour
         return raycastStartHeight;
     }
 
-    private Vector2 polarCordinatesOf(Transform centre, Transform target)
+    private Vector2 PolarCordinatesOf(Transform centre, Transform target)
     {
         var targetPosition = target.position;
         var centrePosition = centre.position;
@@ -65,7 +70,7 @@ public class PlayerController : MonoBehaviour
         return new Vector2(theta, radius);
     }
 
-    private Vector2 cartesianCoordinatesOf(Transform centre, Vector2 polar)
+    private Vector2 CartesianCoordinatesOf(Transform centre, Vector2 polar)
     {
         return new Vector2(
             Mathf.Cos(polar.x) * polar.y,
@@ -73,5 +78,16 @@ public class PlayerController : MonoBehaviour
         );
     }
 
+    private void OnFiringSolutionFound(Vector3 initialVelocity, bool userSelected)
+    {
+        _arrowFirer.Fire(transform.position, initialVelocity);
+    }
+
+    private void OnDestroy()
+    {
+        aimGuide.FiringSolutionFound -= OnFiringSolutionFound;
+    }
+
     private Vector2 _polarCoordinates;
+    private ArrowFirer _arrowFirer;
 }
