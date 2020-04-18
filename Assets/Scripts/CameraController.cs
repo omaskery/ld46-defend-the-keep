@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -15,13 +13,17 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cameraDistance;
 
     [SerializeField] private float lerpAlpha = 0.1f;
+    [SerializeField] private bool snapOnStart;
     
     void Start()
     {
-        UpdateCameraPosition(true);
+        if (snapOnStart)
+        {
+            UpdateCameraPosition(true);
+        }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateCameraPosition();
     }

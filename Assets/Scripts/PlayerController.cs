@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,10 +20,8 @@ public class PlayerController : MonoBehaviour
         _polarCoordinates = polarCordinatesOf(coordinatesCentredOn, transform);
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        var currentPosition = transform.position;
-
         var inputVector = new Vector2(
             Input.GetAxisRaw("Horizontal") * horizontalScaling,
             Input.GetAxisRaw("Vertical") * verticalScaling
@@ -43,8 +37,7 @@ public class PlayerController : MonoBehaviour
             newCartesianCoordinate.y
         );
 
-        currentPosition = nextPosition;
-        transform.position = currentPosition;
+        transform.position = nextPosition;
     }
 
     private float RaycastGroundHeight()
