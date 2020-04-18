@@ -4,6 +4,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private LayerMask destroyMask;
     [SerializeField] private float safeTime;
+    [SerializeField] public float damage;
 
     private void Update()
     {
@@ -26,7 +27,18 @@ public class Projectile : MonoBehaviour
         Debug.Log($"collision {other.gameObject} {objectLayer:X} vs {gameObject} {mask:X} ({objectLayer & mask:X})");
         if ((objectLayer & mask) != 0)
         {
+            var damageable = other.gameObject.GetComponent<ITakeDamage>();
+            if (damageable != null)
+            {
+                damageable.ReceiveDamageFromProjectile(this);
+            }
+            
             Destroy(gameObject);
         }
     }
+}
+
+public interface ITakeDamage
+{
+    void ReceiveDamageFromProjectile(Projectile projectile);
 }
