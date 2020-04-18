@@ -166,7 +166,7 @@ public class AimGuide : MonoBehaviour
         points = ExtrapolateTrajectory(totalTimeToTarget, originPosition, initialVelocity, target);
     }
 
-    private static Vector3[] ExtrapolateTrajectory(float totalTimeToTarget, Vector3 originPosition,
+    private Vector3[] ExtrapolateTrajectory(float totalTimeToTarget, Vector3 originPosition,
         Vector3 initialVelocity, Vector3 target)
     {
         var expectedTimeSteps = 100;
