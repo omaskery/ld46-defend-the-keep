@@ -141,11 +141,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0da41a0cc81b446ebf153d47799c62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 3247673746337920339}
   maxDamage: 80
   minDamage: 5
   startRadius: 0.5
   endRadius: 10
   lifetime: 0.15
+  secondaryExplosionProbability: 0.6
+  secondaryExplosionRange: 1
+  secondaryExplosionRadiusCoefficient: 0.5
 --- !u!54 &945491093850008260
 Rigidbody:
   m_ObjectHideFlags: 0

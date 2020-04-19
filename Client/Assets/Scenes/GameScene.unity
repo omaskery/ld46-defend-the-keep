@@ -2076,7 +2076,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthToHeightCoefficient: 0.1
   keepTop: {fileID: 1377272840}
-  healInterval: 10
+  healInterval: 1
   healAmount: 1
 --- !u!1 &2138049157
 GameObject:
