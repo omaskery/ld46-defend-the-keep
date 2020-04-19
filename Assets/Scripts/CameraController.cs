@@ -30,6 +30,11 @@ public class CameraController : MonoBehaviour
 
     private void UpdateCameraPosition(bool snap=false)
     {
+        if (!lookTowards)
+        {
+            return;
+        }
+        
         var lookFromPosition = lookFrom.position;
         var lookTowardsPosition = lookTowards.position;
 
