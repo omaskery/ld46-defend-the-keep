@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 [RequireComponent(typeof(LineRenderer))]
-public class AimGuide : MonoBehaviour, IReportFiringSolutions
+public class TrajectoryAimGuide : MonoBehaviour, IReportFiringSolutions
 {
     private enum TargetingState
     {
@@ -18,22 +17,21 @@ public class AimGuide : MonoBehaviour, IReportFiringSolutions
     private TargetingState _state = TargetingState.Inactive;
     private Vector3 _targetPoint;
     private Vector3 _initialVelocity;
-    
-    [SerializeField] private LayerMask clickMask;
-    [SerializeField] private float closestDistance;
 
-    [Header("Configuration")] [SerializeField]
-    private float closestHeight;
-
-    [SerializeField] private Camera currentCamera;
-    [SerializeField] private float furthestDistance;
-    [SerializeField] private float furthestHeight;
+    [Header("Configuration")]
+    [SerializeField] private float targetingDuration;
     [SerializeField] private float maxRaycastDistance;
+    [SerializeField] private float closestHeight;
+    [SerializeField] private float closestDistance;
+    [SerializeField] private float furthestHeight;
+    [SerializeField] private float furthestDistance;
+    [SerializeField] private LayerMask clickMask;
 
     [Header("References")] [SerializeField]
     private Transform origin;
+    
+    [SerializeField] private Camera currentCamera;
 
-    [SerializeField] private float targetingDuration;
 
     public event Action<FiringSolution> FiringSolutionFound;
 
@@ -165,8 +163,11 @@ public class AimGuide : MonoBehaviour, IReportFiringSolutions
         var horizontalDirection = (targetHorizontalPosition - originHorizontalPosition).normalized;
         var horizontalDistance = (targetHorizontalPosition - originHorizontalPosition).magnitude;
 
-        initialVelocity = CalculateInitialVelocity(target, horizontalDistance, originPosition,
-            horizontalDirection, out var totalTimeToTarget);
+        var distanceRatio = (horizontalDistance - closestDistance) / (furthestDistance - closestDistance);
+        var apogeeHeight = Mathf.Lerp(closestHeight, furthestHeight, distanceRatio);
+        
+        initialVelocity = TrajectoryCalculator.CalculateInitialVelocity(target, originPosition, apogeeHeight,
+            out var totalTimeToTarget);
 
         points = ExtrapolateTrajectory(totalTimeToTarget, originPosition, initialVelocity, target);
     }
@@ -205,46 +206,10 @@ public class AimGuide : MonoBehaviour, IReportFiringSolutions
         return points.ToArray();
     }
 
-    private Vector3 CalculateInitialVelocity(Vector3 target, float horizontalDistance, Vector3 originPosition,
-        Vector3 horizontalDirection, out float totalTimeToTarget)
-    {
-        var distanceRatio = (horizontalDistance - closestDistance) / (furthestDistance - closestDistance);
-        var apogeeHeight = Mathf.Lerp(closestHeight, furthestHeight, distanceRatio);
-
-        _lineRenderer.enabled = true;
-
-        var heightFromOriginToApogee = apogeeHeight - originPosition.y;
-        var initialUpwardVelocity = Mathf.Sqrt(-2.0f * heightFromOriginToApogee * Physics.gravity.y);
-        var timeToApogee = -initialUpwardVelocity / Physics.gravity.y;
-        var heightFromApogeeToTarget = target.y - apogeeHeight;
-        var timeFromApogeeToTarget = Mathf.Sqrt(2.0f * heightFromApogeeToTarget / Physics.gravity.y);
-        totalTimeToTarget = timeToApogee + timeFromApogeeToTarget;
-        var horizontalSpeed = horizontalDistance / totalTimeToTarget;
-
-        var initialVelocity = (horizontalDirection * horizontalSpeed) + (Vector3.up * initialUpwardVelocity);
-        return initialVelocity;
-    }
-
     private void SetLineRenderer(Vector3[] points)
     {
+        _lineRenderer.enabled = true;
         _lineRenderer.positionCount = points.Length;
         _lineRenderer.SetPositions(points);
     }
-}
-
-public class FiringSolution
-{
-    public enum Conditions
-    {
-        UserSelected,
-        Fallback,
-    }
-
-    public Vector3 InitialVelocity { get; set; }
-    public Conditions Condition { get; set; }
-}
-
-public interface IReportFiringSolutions
-{
-    event Action<FiringSolution> FiringSolutionFound;
 }

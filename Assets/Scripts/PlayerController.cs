@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
         if (aimGuide.TryGetComponent(out _firingSolutionReporter))
         {
             _firingSolutionReporter.FiringSolutionFound += OnFiringSolutionFound;
+            aimGuide.SetActive(true);
         }
     }
 
