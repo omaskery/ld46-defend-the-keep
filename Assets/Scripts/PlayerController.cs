@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
     [Header("References")] [SerializeField]
     private Transform coordinatesCentredOn;
 
-    [SerializeField] private AimGuide aimGuide;
+    [SerializeField] private GameObject aimGuide;
+
+    private IReportFiringSolutions _firingSolutionReporter;
 
     [Header("Ground Check")] [SerializeField]
     private LayerMask groundCheckMask;
@@ -22,7 +24,11 @@ public class PlayerController : MonoBehaviour
     {
         _arrowFirer = GetComponent<ArrowFirer>();
         _polarCoordinates = PolarCordinatesOf(coordinatesCentredOn, transform);
-        aimGuide.FiringSolutionFound += OnFiringSolutionFound;
+
+        if (aimGuide.TryGetComponent(out _firingSolutionReporter))
+        {
+            _firingSolutionReporter.FiringSolutionFound += OnFiringSolutionFound;
+        }
     }
 
     void FixedUpdate()
@@ -85,7 +91,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        aimGuide.FiringSolutionFound -= OnFiringSolutionFound;
+        if (_firingSolutionReporter != null)
+        {
+            _firingSolutionReporter.FiringSolutionFound -= OnFiringSolutionFound;
+        }
     }
 
     private Vector2 _polarCoordinates;

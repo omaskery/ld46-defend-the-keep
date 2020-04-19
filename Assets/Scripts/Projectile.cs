@@ -26,8 +26,7 @@ public class Projectile : MonoBehaviour
         
         if ((objectLayer & mask) != 0)
         {
-            var damageable = other.gameObject.GetComponent<ITakeDamage>();
-            if (damageable != null)
+            if (other.gameObject.TryGetComponent<ITakeDamage>(out var damageable))
             {
                 damageable.ReceiveDamageFromProjectile(this);
             }
