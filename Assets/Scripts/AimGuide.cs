@@ -5,7 +5,7 @@ using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 [RequireComponent(typeof(LineRenderer))]
-public class AimGuide : MonoBehaviour
+public class AimGuide : MonoBehaviour, IReportFiringSolutions
 {
     private enum TargetingState
     {
@@ -35,7 +35,7 @@ public class AimGuide : MonoBehaviour
 
     [SerializeField] private float targetingDuration;
 
-    public event Action<Vector3, bool> FiringSolutionFound;
+    public event Action<FiringSolution> FiringSolutionFound;
 
     void Start()
     {
@@ -61,7 +61,7 @@ public class AimGuide : MonoBehaviour
         {
             if (!Input.GetMouseButton(0))
             {
-                FinishTargeting(true);
+                FinishTargeting(FiringSolution.Conditions.UserSelected);
             }
             else
             {
@@ -73,7 +73,7 @@ public class AimGuide : MonoBehaviour
                 }
                 else
                 {
-                    FinishTargeting(false);
+                    FinishTargeting(FiringSolution.Conditions.Fallback);
                 }
             }
         }
@@ -87,23 +87,28 @@ public class AimGuide : MonoBehaviour
         SetLineRenderer(points);
     }
 
-    private void FinishTargeting(bool userSelected)
+    private void FinishTargeting(FiringSolution.Conditions condition)
     {
         var target = CalculateCurrentTargetPoint();
 
-        var condition = "";
-        if (userSelected)
+        var conditionText = "";
+        if (condition == FiringSolution.Conditions.UserSelected)
         {
-            condition = "user accepted";
+            conditionText = "user accepted";
         }
         else
         {
-            condition = "fallback/timeout";
+            conditionText = "fallback/timeout";
         }
 
         var error = (_targetPoint - target).magnitude;
-        Debug.Log($"{condition} firing solution: {_initialVelocity} (targetting: {target} [error: {error}])");
-        FiringSolutionFound?.Invoke(_initialVelocity, userSelected);
+        Debug.Log($"{conditionText} firing solution: {_initialVelocity} (targetting: {target} [error: {error}])");
+        FiringSolutionFound?.Invoke(new FiringSolution
+            {
+               InitialVelocity = _initialVelocity,
+               Condition = condition,
+            }
+        );
             
         _state = TargetingState.Inactive;
         _lineRenderer.enabled = false;
@@ -225,4 +230,21 @@ public class AimGuide : MonoBehaviour
         _lineRenderer.positionCount = points.Length;
         _lineRenderer.SetPositions(points);
     }
+}
+
+public class FiringSolution
+{
+    public enum Conditions
+    {
+        UserSelected,
+        Fallback,
+    }
+
+    public Vector3 InitialVelocity { get; set; }
+    public Conditions Condition { get; set; }
+}
+
+public interface IReportFiringSolutions
+{
+    event Action<FiringSolution> FiringSolutionFound;
 }

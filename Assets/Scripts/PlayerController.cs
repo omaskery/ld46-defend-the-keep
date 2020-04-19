@@ -78,9 +78,9 @@ public class PlayerController : MonoBehaviour
         );
     }
 
-    private void OnFiringSolutionFound(Vector3 initialVelocity, bool userSelected)
+    private void OnFiringSolutionFound(FiringSolution solution)
     {
-        _arrowFirer.Fire(transform.position, initialVelocity);
+        _arrowFirer.Fire(transform.position, solution.InitialVelocity);
     }
 
     private void OnDestroy()
