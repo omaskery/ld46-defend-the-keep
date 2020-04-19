@@ -143,6 +143,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 3247673746337920339}
   smokePrefab: {fileID: 8337357629975166934, guid: d99d22daaaeac4fecaa14b0d7de11429, type: 3}
+  explosionSounds:
+  - {fileID: 8300000, guid: 988b0098b33374b4da4d16e9e04c9cd5, type: 3}
+  - {fileID: 8300000, guid: f6601a429940f4fd28708ad405161ade, type: 3}
   maxDamage: 80
   minDamage: 5
   startRadius: 0.5

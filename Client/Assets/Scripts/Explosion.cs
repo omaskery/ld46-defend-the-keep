@@ -7,6 +7,7 @@ public class Explosion : MonoBehaviour
 {
     [SerializeField] private Explosion explosionPrefab;
     [SerializeField] private Smoke smokePrefab;
+    [SerializeField] private AudioClip[] explosionSounds;
     [SerializeField] private float maxDamage;
     [SerializeField] private float minDamage;
     [SerializeField] private float startRadius;
@@ -27,7 +28,7 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float smokeLifetimeMax;
     
     private readonly HashSet<GameObject> _damaged = new HashSet<GameObject>();
-    private float _timeAlive = 0.0f;
+    private float _timeAlive;
     private Transform _transform;
     
     void Start()
@@ -35,6 +36,8 @@ public class Explosion : MonoBehaviour
         _transform = transform;
         SetRadius(startRadius);
         Invoke(nameof(OnExpiration), lifetime);
+        
+        AudioController.Instance.PlayOneOf(explosionSounds, _transform.position);
     }
 
     private void OnExpiration()
