@@ -12,6 +12,9 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Configurations")]
     [SerializeField] private float spawnDistance;
+    [SerializeField] private int enemiesToSpawn = 1;
+
+    [SerializeField] private float difficultyInterval = 10.0f;
 
     [SerializeField] private float minSpawnInterval = 0.1f;
     [SerializeField] private float maxSpawnInterval = 4.0f;
@@ -19,6 +22,18 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         ScheduleSpawn();
+        ScheduleDifficultyIncrease();
+    }
+
+    private void ScheduleDifficultyIncrease()
+    {
+        Invoke(nameof(OnIncreaseDifficulty), difficultyInterval);
+    }
+
+    private void OnIncreaseDifficulty()
+    {
+        ScheduleDifficultyIncrease();
+        enemiesToSpawn += 1;
     }
 
     private void ScheduleSpawn()
@@ -30,7 +45,11 @@ public class EnemySpawner : MonoBehaviour
     private void OnScheduledSpawn()
     {
         ScheduleSpawn();
-        SpawnAtCircumference();
+        
+        for (var i = 0; i < enemiesToSpawn; i++)
+        {
+            SpawnAtCircumference();
+        }
     }
 
     private void SpawnAtCircumference()

@@ -143,7 +143,7 @@ MonoBehaviour:
   maxDamage: 80
   minDamage: 5
   startRadius: 0.5
-  endRadius: 5
+  endRadius: 10
   lifetime: 0.15
 --- !u!54 &945491093850008260
 Rigidbody:
