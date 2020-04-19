@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Health : MonoBehaviour, ITakeDamage
@@ -12,25 +11,27 @@ public class Health : MonoBehaviour, ITakeDamage
     public float MaximumHealth => maximumHealth;
     public float CurrentHealth => currentHealth;
 
+    public event Action<Health> Destroyed;
+    public event Action<Health, IApplyDamage> Damaged;
+
     public void Start()
     {
-        currentHealth = maximumHealth;
+        if (Math.Abs(currentHealth) < Mathf.Epsilon)
+        {
+            currentHealth = maximumHealth;
+        }
     }
     
     public void ReceiveDamageFromProjectile(IApplyDamage projectile)
     {
-        currentHealth -= projectile.Damage;
+        currentHealth = Mathf.Clamp(currentHealth - projectile.Damage, 0.0f, maximumHealth);
         
-        Debug.Log($"{gameObject.name} took {projectile.Damage} damage from {projectile}");
-        
-        if (currentHealth <= 0)
+        Damaged?.Invoke(this, projectile);
+
+        if (currentHealth <= 0 && destroyOnZeroHealth)
         {
-            currentHealth = 0;
-            
-            if (destroyOnZeroHealth)
-            {
-                Destroy(gameObject);
-            }
+            Destroyed?.Invoke(this);
+            Destroy(gameObject);
         }
     }
 }

@@ -1853,10 +1853,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60f1342a7fe642208251f854620048f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumHealth: 100
-  currentHealth: 0
+  maximumHealth: 1000
+  currentHealth: 10
   wantsHealthbar: 0
-  destroyOnZeroHealth: 0
+  destroyOnZeroHealth: 1
 --- !u!114 &2063312442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1871,6 +1871,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthToHeightCoefficient: 0.1
   keepTop: {fileID: 1377272840}
+  healInterval: 10
+  healAmount: 1
 --- !u!1 &2138049157
 GameObject:
   m_ObjectHideFlags: 0
