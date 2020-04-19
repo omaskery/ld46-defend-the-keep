@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
@@ -18,6 +19,10 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private float minSpawnInterval = 0.1f;
     [SerializeField] private float maxSpawnInterval = 4.0f;
+
+    private int _enemiesDestroyed;
+
+    public event Action<int> EnemyDestroyed;
 
     void Start()
     {
@@ -69,6 +74,19 @@ public class EnemySpawner : MonoBehaviour
         var rotation = Quaternion.Euler(0, 360.0f * Random.value, 0);
         var enemy = Instantiate(enemyPrefab, position, rotation, enemyParent);
         enemy.target = target;
+
+        if (enemy.TryGetComponent<Health>(out var health))
+        {
+            health.Destroyed += OnEnemyDestroyed;
+        }
+    }
+
+    private void OnEnemyDestroyed(Health health)
+    {
+        health.Destroyed -= OnEnemyDestroyed;
+        _enemiesDestroyed++;
+        
+        EnemyDestroyed?.Invoke(_enemiesDestroyed);
     }
 
     private float GenerateRandomSpawnInterval()

@@ -8,6 +8,8 @@ public class LevelController : MonoBehaviour
 {
     [SerializeField] public Keep keep;
     [SerializeField] public Text survivalTimeText;
+    [SerializeField] public Text killCountText;
+    [SerializeField] public EnemySpawner enemySpawner;
 
     private Color _initialColour;
     private float _survivalTime;
@@ -15,6 +17,14 @@ public class LevelController : MonoBehaviour
     void Start()
     {
         _initialColour = survivalTimeText.color;
+        enemySpawner.EnemyDestroyed += OnEnemyDestroyed;
+        
+        OnEnemyDestroyed(0);
+    }
+
+    private void OnEnemyDestroyed(int numberDestroyed)
+    {
+        killCountText.text = $"Cubes Stopped: {numberDestroyed}";
     }
 
     void Update()
