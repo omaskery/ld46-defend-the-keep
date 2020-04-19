@@ -1,6 +1,8 @@
-# Defend your Keep!
+# Defend your Keep
 
-## Keep it alive!
+## Keep it alive
+
+![Screenshot](./Images/screenshot.png)
 
 ### Overview
 
@@ -13,4 +15,3 @@ It's technically, sort of, a game, though! :)
 ### How to play
 
 Left click to fire at a spot, use A or D to move around the circumference of the keep!
-
