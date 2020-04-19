@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -41,5 +42,19 @@ public class EnemyController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, desiredFacing, turnRate);
 
         _rigidbody.velocity = transform.TransformVector(Vector3.forward * movementSpeed);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.TryGetComponent<Keep>(out var keep))
+        {
+            keep.Health.ReceiveDamageFromProjectile(new KeepAttack());
+            Destroy(gameObject);
+        }
+    }
+
+    private class KeepAttack : IApplyDamage
+    {
+        public float Damage => 1.0f;
     }
 }
