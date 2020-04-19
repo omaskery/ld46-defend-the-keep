@@ -143,4 +143,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4864
   safeTime: 0.25
-  damage: 100
+  damage: 0

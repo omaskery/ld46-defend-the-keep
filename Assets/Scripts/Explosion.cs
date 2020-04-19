@@ -11,9 +11,8 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float endRadius;
     [SerializeField] private float lifetime;
     
-    private HashSet<GameObject> _damaged = new HashSet<GameObject>();
+    private readonly HashSet<GameObject> _damaged = new HashSet<GameObject>();
     private float _timeAlive = 0.0f;
-    private float _currentRadius;
     
     void Start()
     {
@@ -23,7 +22,6 @@ public class Explosion : MonoBehaviour
 
     private void SetRadius(float radius)
     {
-        _currentRadius = radius;
         transform.localScale = new Vector3(radius, radius, radius);
     }
 
@@ -35,7 +33,7 @@ public class Explosion : MonoBehaviour
         SetRadius(Mathf.Lerp(startRadius, endRadius, ratio));
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnCollisionEnter(Collision other)
     {
         if (_damaged.Contains(other.gameObject))
         {
@@ -45,11 +43,13 @@ public class Explosion : MonoBehaviour
         if (other.gameObject.TryGetComponent<ITakeDamage>(out var damageable))
         {
             var explosionPosition = transform.position;
-            var distance = (other.ClosestPoint(explosionPosition) - explosionPosition).sqrMagnitude;
-            var distanceRatio = Mathf.Clamp(distance / (endRadius * endRadius), 0.0f, 1.0f);
+            var distanceSquared = (other.contacts[0].point - explosionPosition).sqrMagnitude;
+            var distanceRatio = Mathf.Clamp(distanceSquared / (endRadius * endRadius), 0.0f, 1.0f);
+            var damage = Mathf.Lerp(maxDamage, minDamage, distanceRatio);
+            Debug.Log($"damage ray {{damage: {damage} distance: {Mathf.Sqrt(distanceSquared)} ratio: {distanceRatio}}}");
             damageable.ReceiveDamageFromProjectile(new DamageRay
             {
-                Damage = Mathf.Lerp(maxDamage, minDamage, distanceRatio),
+                Damage = damage,
             });
         }
 

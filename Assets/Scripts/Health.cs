@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, ITakeDamage
 {
-    [SerializeField] private float maximumHealth = 100.0f;
-    [SerializeField] private float currentHealth;
+    [SerializeField] public float maximumHealth = 100.0f;
+    [SerializeField] public float currentHealth;
+    [SerializeField] public bool wantsHealthbar = true;
     [SerializeField] private bool destroyOnZeroHealth = true;
+
+    public float MaximumHealth => maximumHealth;
+    public float CurrentHealth => currentHealth;
 
     public void Start()
     {
@@ -16,6 +20,8 @@ public class Health : MonoBehaviour, ITakeDamage
     public void ReceiveDamageFromProjectile(IApplyDamage projectile)
     {
         currentHealth -= projectile.Damage;
+        
+        Debug.Log($"{gameObject.name} took {projectile.Damage} damage from {projectile}");
         
         if (currentHealth <= 0)
         {

@@ -175,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumHealth: 100
   currentHealth: 0
+  wantsHealthbar: 1
   destroyOnZeroHealth: 1
 --- !u!114 &7027641795100039832
 MonoBehaviour:

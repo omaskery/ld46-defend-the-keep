@@ -37,7 +37,6 @@ public class Projectile : MonoBehaviour, IApplyDamage
 
             if (destructionPrefab)
             {
-                Debug.Log("spawning explosion");
                 Instantiate(destructionPrefab, transform.position, Quaternion.LookRotation(other.contacts[0].normal), transform.parent);
             }
             

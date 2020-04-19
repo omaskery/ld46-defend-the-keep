@@ -31,7 +31,6 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
             {
                 _canFire = false;
                 var interval = 1.0f / fireRate;
-                Debug.Log($"firing with interval: {interval}");
                 Invoke(nameof(OnFireTimerExpired), interval);
             
                 var originPosition = origin.position;
@@ -62,7 +61,6 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
 
     private void OnFireTimerExpired()
     {
-        Debug.Log("fire timer expired");
         _canFire = true;
     }
     
