@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 3247673746337920339}
+  smokePrefab: {fileID: 8337357629975166934, guid: d99d22daaaeac4fecaa14b0d7de11429, type: 3}
   maxDamage: 80
   minDamage: 5
   startRadius: 0.5
@@ -150,6 +151,14 @@ MonoBehaviour:
   secondaryExplosionProbability: 0.6
   secondaryExplosionRange: 1
   secondaryExplosionRadiusCoefficient: 0.5
+  smokeProbability: 0.8
+  smokeRange: 4
+  smokeRadiusMin: 1
+  smokeRadiusMax: 4
+  smokeQuantityMin: 2
+  smokeQuantityMax: 15
+  smokeLifetimeMin: 0.5
+  smokeLifetimeMax: 5
 --- !u!54 &945491093850008260
 Rigidbody:
   m_ObjectHideFlags: 0
