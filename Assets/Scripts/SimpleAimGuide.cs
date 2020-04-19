@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
 {
@@ -11,6 +10,9 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
     [SerializeField] private float closestDistance;
     [SerializeField] private float furthestHeight;
     [SerializeField] private float furthestDistance;
+    [SerializeField] private float fireRate = 4.0f;
+    [SerializeField] private float errorRadius = 1.0f;
+    [SerializeField] private float apogeeOffset = 5.0f;
     [SerializeField] private LayerMask clickMask;
 
     [Header("References")]
@@ -19,18 +21,33 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
     
     public event Action<FiringSolution> FiringSolutionFound;
 
+    private bool _canFire = true;
+
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0) && _canFire)
         {
             if (CheckForValidTarget(out var clickPoint))
             {
+                _canFire = false;
+                var interval = 1.0f / fireRate;
+                Debug.Log($"firing with interval: {interval}");
+                Invoke(nameof(OnFireTimerExpired), interval);
+            
                 var originPosition = origin.position;
+
+                var theta = Random.value * 2.0f * Mathf.PI;
+                var error = Random.value * errorRadius;
+                var target = clickPoint + new Vector3(
+                    Mathf.Cos(theta) * error,
+                    0.0f,
+                    Mathf.Sin(theta) * error
+                );
                 
                 var initialVelocity = TrajectoryCalculator.CalculateInitialVelocity(
-                    clickPoint,
+                    target,
                     originPosition,
-                    originPosition.y + 5.0f,
+                    originPosition.y + apogeeOffset,
                     out _
                 );
                 
@@ -41,6 +58,12 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
                 });
             }
         }
+    }
+
+    private void OnFireTimerExpired()
+    {
+        Debug.Log("fire timer expired");
+        _canFire = true;
     }
     
     private bool CheckForValidTarget(out Vector3 point)

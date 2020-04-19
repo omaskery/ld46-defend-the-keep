@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972734367bb1a42958a576baaf9dfa9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destructionPrefab: {fileID: 3232132412373835664, guid: 06021f06bf67649a7a008d7456ebc31b, type: 3}
   destroyMask:
     serializedVersion: 2
-    m_Bits: 6912
+    m_Bits: 4864
   safeTime: 0.25
   damage: 100

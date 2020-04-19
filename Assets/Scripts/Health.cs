@@ -13,9 +13,9 @@ public class Health : MonoBehaviour, ITakeDamage
         currentHealth = maximumHealth;
     }
     
-    public void ReceiveDamageFromProjectile(Projectile projectile)
+    public void ReceiveDamageFromProjectile(IApplyDamage projectile)
     {
-        currentHealth -= projectile.damage;
+        currentHealth -= projectile.Damage;
         
         if (currentHealth <= 0)
         {

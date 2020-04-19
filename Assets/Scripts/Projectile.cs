@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IApplyDamage
 {
+    [SerializeField] private GameObject destructionPrefab;
     [SerializeField] private LayerMask destroyMask;
     [SerializeField] private float safeTime;
-    [SerializeField] public float damage;
+    [SerializeField] private float damage;
+
+    public float Damage => damage;
 
     private void Update()
     {
@@ -30,13 +34,24 @@ public class Projectile : MonoBehaviour
             {
                 damageable.ReceiveDamageFromProjectile(this);
             }
+
+            if (destructionPrefab)
+            {
+                Debug.Log("spawning explosion");
+                Instantiate(destructionPrefab, transform.position, Quaternion.LookRotation(other.contacts[0].normal), transform.parent);
+            }
             
             Destroy(gameObject);
         }
     }
 }
 
+public interface IApplyDamage
+{
+    float Damage { get; }
+}
+
 public interface ITakeDamage
 {
-    void ReceiveDamageFromProjectile(Projectile projectile);
+    void ReceiveDamageFromProjectile(IApplyDamage projectile);
 }
