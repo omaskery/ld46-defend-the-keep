@@ -248,6 +248,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 217790404}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &220304007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 220304008}
+  m_Layer: 0
+  m_Name: AimGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &220304008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220304007}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.937234, y: 15.204494, z: -34.909508}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2138049160}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240549220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,7 +1547,7 @@ GameObject:
   - component: {fileID: 2138049159}
   - component: {fileID: 2138049158}
   m_Layer: 0
-  m_Name: AimGuide
+  m_Name: TrajectoryAimGuide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1534,8 +1565,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb40f45ba8a347d79d418cbd0784227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lineRenderer: {fileID: 0}
+  _targetingTimer: 0
+  _state: 0
+  _targetPoint: {x: 0, y: 0, z: 0}
+  _initialVelocity: {x: 0, y: 0, z: 0}
   clickMask:
-    serializedVersion: 2
     m_Bits: 768
   closestDistance: 1
   closestHeight: 10
@@ -1650,12 +1685,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138049157}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.937234, y: -15.204494, z: 34.909508}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 220304008}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4168782842471123614
 PrefabInstance:
@@ -1687,7 +1722,7 @@ PrefabInstance:
     - target: {fileID: 4168782840542950060, guid: a5cd6d439d91e4588adc6bf9b6ac3f8c, type: 3}
       propertyPath: aimGuide
       value: 
-      objectReference: {fileID: 2138049158}
+      objectReference: {fileID: 2138049157}
     - target: {fileID: 4168782840542950066, guid: a5cd6d439d91e4588adc6bf9b6ac3f8c, type: 3}
       propertyPath: m_Name
       value: Player
