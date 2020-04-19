@@ -42,11 +42,12 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
                     0.0f,
                     Mathf.Sin(theta) * error
                 );
-                
+
+                var apogeeHeight = Mathf.Max(originPosition.y, target.y) + apogeeOffset;
                 var initialVelocity = TrajectoryCalculator.CalculateInitialVelocity(
                     target,
                     originPosition,
-                    originPosition.y + apogeeOffset,
+                    apogeeHeight,
                     out _
                 );
                 
@@ -70,11 +71,8 @@ public class SimpleAimGuide : MonoBehaviour, IReportFiringSolutions
 
         if (Physics.Raycast(mouseRay, out var hitInfo, maxRaycastDistance, clickMask))
         {
-            if (hitInfo.collider.gameObject.GetComponent<Targetable>() != null)
-            {
-                point = hitInfo.point;
-                return true;
-            }
+            point = hitInfo.point;
+            return true;
         }
 
         point = Vector3.zero;
