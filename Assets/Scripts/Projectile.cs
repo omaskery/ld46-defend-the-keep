@@ -24,7 +24,6 @@ public class Projectile : MonoBehaviour
         var objectLayer = 1 << other.collider.gameObject.layer;
         var mask = destroyMask.value;
         
-        Debug.Log($"collision {other.gameObject} {objectLayer:X} vs {gameObject} {mask:X} ({objectLayer & mask:X})");
         if ((objectLayer & mask) != 0)
         {
             var damageable = other.gameObject.GetComponent<ITakeDamage>();
